@@ -37,17 +37,15 @@
         <!-- You only need this form and the form-login.css -->
 <div>
     <ul>
-        <li><p id="btnShow"><a href=""  /> Add Todo Task</a><p> </li>
+        <li><p id="btnShow"><a href="" class="launch-modal" data-modal-id="modal-login"  /> Add Todo Task</a><p> </li>
         <li><a href="#">Edit Profile</a></li>
         <li><a href="#">Logout</a></li>
     </ul>
 </div>
 
-        <div class="top-big-link">
-            <a class="btn btn-link-1 launch-modal" href="#" data-modal-id="modal-login">Modal Login</a>
-        </div>
+       
 
-
+   <!-- MODAL -->
         <div class="modal fade" id="modal-login" tabindex="-1" role="dialog" aria-labelledby="modal-login-label" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -56,22 +54,29 @@
                         <button type="button" class="close" data-dismiss="modal">
                             <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
                         </button>
-                        <h3 class="modal-title" id="modal-login-label">Login to our site</h3>
-                        <p>Enter your username and password to log on:</p>
+                        <h3 class="modal-title" id="modal-login-label">Add Task to your ToDo List</h3>
                     </div>
                     
                     <div class="modal-body">
                         
                         <form role="form" action="" method="post" class="login-form">
                             <div class="form-group">
-                                <label class="sr-only" for="form-username">Username</label>
-                                <input type="text" name="form-username" placeholder="Username..." class="form-username form-control" id="form-username">
+                                <label class="sr-only" for="form-name">ToDo NAme</label>
+                                <input type="text" name="toDoName" placeholder="Defending..." class="form-username form-control" id="form-name" required="">
                             </div>
                             <div class="form-group">
-                                <label class="sr-only" for="form-password">Password</label>
-                                <input type="password" name="form-password" placeholder="Password..." class="form-password form-control" id="form-password">
+                                <label class="sr-only" for="form-text">Todo Descriptio</label>
+                                <input type="text" name="form-desc" placeholder="I am Defending.." class="form-password form-control" id="form-desc">
                             </div>
-                            <button type="submit" class="btn">Sign in!</button>
+                            <div class="form-group">
+                                <label class="sr-only" for="form-date">Date</label>
+                                <input type="date" name="form-desc" placeholder="" class="form-password form-control" id="form-date" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="sr-only" for="form-date">Time</label>
+                                <input type="time" name="form-desc" placeholder="" class="form-password form-control" id="form-date" required>
+                            </div>
+                            <button type="submit" class="btn">Add Task</button>
                         </form>
                         
                     </div>
@@ -79,7 +84,7 @@
                 </div>
             </div>
         </div>
-
+ <!-- END OF MODAL -->
 
       
         <script src="assets/js/jquery-1.11.1.min.js"></script>
