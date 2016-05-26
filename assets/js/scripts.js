@@ -1,3 +1,5 @@
+
+//Global variables 
 var ref = new Firebase("https://todolistapp23.firebaseio.com/");
 var authtoken = sessionStorage.getItem('token'),
   uid;
@@ -31,8 +33,10 @@ ref.authWithCustomToken(authtoken, function(error, result) {
         var date1 = new Date();
         var j = date1.getTime();
         var d = datasnap[key].date;
-        if(j - datasnap[key].alert < 30000 && datasnap[key].alert != NaN && datasnap[key].date < j){
-          console.log("hi")
+        if (j - datasnap[key].alert < 30000 && datasnap[key].alert == isNaN && datasnap[key].date < j) {
+          setInterval(function() {
+            alert("You have" + datasnap[key].name + " now");
+          }, j - datasnap[key].alert);
         }
         var date = new Date(d);
         $("#taskrow").append(
@@ -82,7 +86,7 @@ $(document).ready(function() {
     e.preventDefault();
     $('#' + $(this).data('modal-id')).modal();
   });
-
+  // When the add button is clicked
   $('.login-form').on('submit', function() {
     var timeInMs = Date.now();
     var name = $(this).find('input[name="toDoName"]').val();
@@ -97,8 +101,7 @@ $(document).ready(function() {
       'name': name,
       'desc': desc,
       'date': date + 3600000,
-      'alert': date - 300000,
-      'alert2': date - 30000
+      'alert': date - 300000
     });
   });
 
