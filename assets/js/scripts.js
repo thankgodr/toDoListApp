@@ -2,40 +2,43 @@ var ref = new Firebase("https://todolistapp23.firebaseio.com/");
 var authtoken = sessionStorage.getItem('token'),
   uid;
 
-//time to date
-function to12hrs(mi) {
-  var offset = 10;
-  var d = new Date(mi + (3600000 * offset));
-  return d.toGMTString()
+//milliseconds to time
+function msToTime(duration) {
+  var milliseconds = parseInt((duration % 1000) / 100),
+    seconds = parseInt((duration / 1000) % 60),
+    minutes = parseInt((duration / (1000 * 60)) % 60),
+    hours = parseInt((duration / (1000 * 60 * 60)) % 24);
+
+  hours = (hours < 10) ? "0" + hours : hours;
+  minutes = (minutes < 10) ? "0" + minutes : minutes;
+  seconds = (seconds < 10) ? "0" + seconds : seconds;
+
+  return hours + ":" + minutes + ":" + seconds + "." + milliseconds;
 }
 
 //Firebase Authentiate or reidrect back to logon page
 ref.auth(authtoken, function(error, result) {
   if (error) {
-    console.log("Authentication Failed!", error);
+    alert("You need to Login");
     window.location.href = "register.html";
   } else {
-    uid = result.uid
+    uid = result.uid;
     var useref = ref.child("todo");
     useref.child(uid).on("value", function(snapshot) {
-      console.log(snapshot.val())
       $("#taskrow").html();
       var datasnap = snapshot.val();
-      for (key in datasnap) {
-        var date = new Date(parseInt(key))
+      for (var key in datasnap) {
+        var d = datasnap[key].date;
+        var date = new Date(d);
         $("#taskrow").append(
           '<div class="col-lg-3 col-sm-2 todolistbg " id="' + key + '""><p>' + datasnap[key].name +
-          '</p><p>' + datasnap[key].date + 
-          '<p>'+datasnap[key].time+'</p></p><p><a href="#">Read More</a></p></div>')
+          '<p>' + date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + date.getDate() + '</p>' + msToTime(date) + '</p><p><a href="#">Read More</a></p></div>');
       }
     }, function(errorObject) {
-      $("#taskrow").append('<div class="col-sm-3 col-md-6 col-lg-4"><header>No Task in your List</header><main></main></div>');
-
-      console.log("The read failed: " + errorObject.code);
+      $("#taskrow").append('<div class="col-sm-3 col-md-6 col-lg-4"><header>No Task in your List or There was an error</header><main></main></div>');
     });
-    console.log("Auth expires at:", new Date(result.expires * 1000));
   }
-})
+});
 
 
 
@@ -55,16 +58,16 @@ $(document).ready(function() {
     var desc = $(this).find('input[name="form-desc"]').val();
     var dateStr = $(this).find('input[name="form-date"]').val();
     var time = $(this).find('input[name="form-time"]').val();
-    dateStr= dateStr.split("-").join("/");
-    var date = new Date(dateStr+" "+time+":00");
+    dateStr = dateStr.split("-").join("/");
+    var date = new Date(dateStr + " " + time + ":00");
     date = date.getTime();
-    alert(date);
     var refTodo = ref.child("todo");
     refTodo.child(uid).child(timeInMs).set({
       'name': name,
       'desc': desc,
       'date': date,
-      'time': time
+      'alert': date - 300000,
+      'alert2': date - 30000
     });
   });
 
