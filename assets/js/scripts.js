@@ -13,11 +13,11 @@ function msToTime(duration) {
   minutes = (minutes < 10) ? "0" + minutes : minutes;
   seconds = (seconds < 10) ? "0" + seconds : seconds;
 
-  return hours + ":" + minutes + ":" + seconds + "." + milliseconds;
+  return hours + ":" + minutes + ":" + seconds;
 }
 
 //Firebase Authentiate or reidrect back to logon page
-ref.auth(authtoken, function(error, result) {
+ref.authWithCustomToken(authtoken, function(error, result) {
   if (error) {
     alert("You need to Login");
     window.location.href = "register.html";
@@ -28,7 +28,12 @@ ref.auth(authtoken, function(error, result) {
       $("#taskrow").html();
       var datasnap = snapshot.val();
       for (var key in datasnap) {
+        var date1 = new Date();
+        var j = date1.getTime();
         var d = datasnap[key].date;
+        if(j - datasnap[key].alert < 30000 && datasnap[key].alert != NaN && datasnap[key].date < j){
+          console.log("hi")
+        }
         var date = new Date(d);
         $("#taskrow").append(
           '<div class="col-lg-3 col-sm-2 todolistbg " id="' + key + '""><p>' + datasnap[key].name +
@@ -44,6 +49,32 @@ ref.auth(authtoken, function(error, result) {
 
 
 $(document).ready(function() {
+  /*
+    Date Validation to make sure date is future date or today
+  */
+
+  var input = document.getElementById("form-date");
+  var today = new Date();
+  var day = today.getDate();
+
+  // Set month to string to add leading 0
+  var mon = new String(today.getMonth() + 1); //January is 0!
+  var yr = today.getFullYear();
+
+  if (mon.length < 2) {
+    mon = "0" + mon;
+  }
+  if (day.length < 2) {
+    dayn = "0" + day;
+  }
+
+  var date = yr + '-' + mon + '-' + day;
+
+  input.disabled = false;
+  input.setAttribute('min', date);
+
+  //-------------------------------------------------------\\
+
   /*
         Modals
     */
@@ -65,7 +96,7 @@ $(document).ready(function() {
     refTodo.child(uid).child(timeInMs).set({
       'name': name,
       'desc': desc,
-      'date': date,
+      'date': date + 3600000,
       'alert': date - 300000,
       'alert2': date - 30000
     });
