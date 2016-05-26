@@ -25,7 +25,8 @@ ref.auth(authtoken, function(error, result) {
         var date = new Date(parseInt(key))
         $("#taskrow").append(
           '<div class="col-lg-3 col-sm-2 todolistbg " id="' + key + '""><p>' + datasnap[key].name +
-          '</p><p>Date: ' + datasnap[key].date + '</p><p><a href="#">Read More</a></p></div>')
+          '</p><p>' + datasnap[key].date + 
+          '<p>'+datasnap[key].time+'</p></p><p><a href="#">Read More</a></p></div>')
       }
     }, function(errorObject) {
       $("#taskrow").append('<div class="col-sm-3 col-md-6 col-lg-4"><header>No Task in your List</header><main></main></div>');
@@ -52,8 +53,12 @@ $(document).ready(function() {
     var timeInMs = Date.now();
     var name = $(this).find('input[name="toDoName"]').val();
     var desc = $(this).find('input[name="form-desc"]').val();
-    var date = $(this).find('input[name="form-date"]').val();
+    var dateStr = $(this).find('input[name="form-date"]').val();
     var time = $(this).find('input[name="form-time"]').val();
+    dateStr= dateStr.split("-").join("/");
+    var date = new Date(dateStr+" "+time+":00");
+    date = date.getTime();
+    alert(date);
     var refTodo = ref.child("todo");
     refTodo.child(uid).child(timeInMs).set({
       'name': name,
