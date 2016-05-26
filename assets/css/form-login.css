@@ -225,3 +225,9 @@ html{
     }
 
 }
+.todolistbg {
+    background: #673AB7;
+    color: white;
+    border: solid;
+    border-color: #fff;
+}

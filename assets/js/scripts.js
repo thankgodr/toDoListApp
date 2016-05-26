@@ -2,26 +2,44 @@ var ref = new Firebase("https://todolistapp23.firebaseio.com/");
 var authtoken = sessionStorage.getItem('token'),
   uid;
 
+//time to date
+function to12hrs(mi) {
+  var offset = 10;
+  var d = new Date(mi + (3600000 * offset));
+  return d.toGMTString()
+}
+
 //Firebase Authentiate or reidrect back to logon page
 ref.auth(authtoken, function(error, result) {
   if (error) {
     console.log("Authentication Failed!", error);
-    window.location = "register.html";
+    window.location.href = "register.html";
   } else {
     uid = result.uid
     var useref = ref.child("todo");
     useref.child(uid).on("value", function(snapshot) {
-      for(key in snapshot.val()){
-        console.log(key);
+      console.log(snapshot.val())
+      $("#taskrow").html();
+      var datasnap = snapshot.val();
+      for (key in datasnap) {
+        var date = new Date(parseInt(key))
+        $("#taskrow").append(
+          '<div class="col-lg-3 col-sm-2 todolistbg " id="' + key + '""><p>' + datasnap[key].name +
+          '</p><p>Date: ' + datasnap[key].date + '</p><p><a href="#">Read More</a></p></div>')
       }
     }, function(errorObject) {
+      $("#taskrow").append('<div class="col-sm-3 col-md-6 col-lg-4"><header>No Task in your List</header><main></main></div>');
+
       console.log("The read failed: " + errorObject.code);
     });
     console.log("Auth expires at:", new Date(result.expires * 1000));
   }
 })
 
-jQuery(document).ready(function() {
+
+
+
+$(document).ready(function() {
   /*
         Modals
     */
@@ -43,6 +61,13 @@ jQuery(document).ready(function() {
       'date': date,
       'time': time
     });
+  });
+
+  // Log out and redirect when the button is click
+  $('#logoubtn').click(function() {
+    sessionStorage.setItem('token', "null");
+    alert("You just logged out");
+    window.location = "register.html";
   });
 
 });
