@@ -35,9 +35,16 @@ $(document).ready(function() {
   $('.form-twitter-button').click(function() {
     ref.authWithOAuthPopup("twitter", function(error, authData) {
       if (error) {
-        console.log("Login Failed!", error);
+        alert("Login Failed!", error);
       } else {
-        console.log("Authenticated successfully with payload:", authData);
+          usersRef.child(authData.uid).set({
+          details: {
+            full_name: authData.twitter.displayName,
+            picture: authData.twitter.profileImageURL,
+          }
+        });
+        sessionStorage.setItem('token', authData.token);
+        window.location = "index.html";
       }
     });
   });
