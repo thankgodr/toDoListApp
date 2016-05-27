@@ -2,6 +2,10 @@
 html{
     background-color: #f3f3f3;
 }
+#upName{
+    text-transform: uppercase;
+    color: #fff;
+}
 
 .form-login{
     max-width: 1000px;

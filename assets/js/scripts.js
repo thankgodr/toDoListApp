@@ -2,7 +2,7 @@
 //Global variables 
 var ref = new Firebase("https://todolistapp23.firebaseio.com/");
 var authtoken = sessionStorage.getItem('token'),
-  uid;
+  uid = "a";
 
 //milliseconds to time
 function msToTime(duration) {
@@ -26,17 +26,17 @@ ref.authWithCustomToken(authtoken, function(error, result) {
   } else {
     uid = result.uid;
     var useref = ref.child("todo");
-    useref.child(uid).on("value", function(snapshot) {
+    useref.child(uid).orderByKey().on("value", function(snapshot) {
       $("#taskrow").html();
       var datasnap = snapshot.val();
       for (var key in datasnap) {
         var date1 = new Date();
         var j = date1.getTime();
         var d = datasnap[key].date;
-        if (j - datasnap[key].alert < 30000 && datasnap[key].alert == isNaN && datasnap[key].date < j) {
-          setInterval(function() {
-            alert("You have" + datasnap[key].name + " now");
-          }, j - datasnap[key].alert);
+        if (j - datasnap[key].alert <= 300000 && j > datasnap[key].alert) {
+          setTimeout(function(){
+            alert("You have " + datasnap[key].name + " now");
+          }, j - datasnap[key].alert)
         }
         var date = new Date(d);
         $("#taskrow").append(
@@ -46,9 +46,13 @@ ref.authWithCustomToken(authtoken, function(error, result) {
     }, function(errorObject) {
       $("#taskrow").append('<div class="col-sm-3 col-md-6 col-lg-4"><header>No Task in your List or There was an error</header><main></main></div>');
     });
+    var eachUser = ref.child('users');
+    eachUser.child(uid).on("value", function(snapshot){
+      $('#upName').html(snapshot.val().details.full_name)
+      console.log(snapshot.val().details.full_name)
+})
   }
 });
-
 
 
 
