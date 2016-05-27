@@ -53,7 +53,7 @@ ref.authWithCustomToken(authtoken, function(error, result) {
 })
   }
 });
-
+a
 
 
 $(document).ready(function() {
