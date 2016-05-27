@@ -44,7 +44,7 @@ ref.authWithCustomToken(authtoken, function(error, result) {
           '<p>' + date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + date.getDate() + '</p>' + msToTime(date) + '</p><p><a href="#">Read More</a></p></div>');
       }
     }, function(errorObject) {
-      $("#taskrow").append('<div class="col-sm-3 col-md-6 col-lg-4"><header>No Task in your List or There was an error</header><main></main></div>');
+      $("#taskrow").append('<div class="col-sm-3 col-md-6 col-lg-4"> <header>No Task in your List or There was an error</header><main></main></div>');
     });
     var eachUser = ref.child('users');
     eachUser.child(uid).on("value", function(snapshot){
