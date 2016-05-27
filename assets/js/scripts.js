@@ -34,7 +34,7 @@ ref.authWithCustomToken(authtoken, function(error, result) {
         var j = date1.getTime();
         var d = datasnap[key].date;
         if (j - datasnap[key].alert <= 300000 && j > datasnap[key].alert) {
-          setTimeout(function(){
+          setInterval(function(){
             alert("You have " + datasnap[key].name + " now");
           }, j - datasnap[key].alert)
         }
